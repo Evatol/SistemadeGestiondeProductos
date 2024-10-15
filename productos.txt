@@ -1,0 +1,5 @@
+Manzanas,3500,3
+Leche,8500,5
+Pan,4500,3
+Cafe,23000,1
+Carne,53000,3
