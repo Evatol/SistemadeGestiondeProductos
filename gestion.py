@@ -13,11 +13,34 @@ class Producto:
     def __str__(self):
         return f"{self.nombre} - Precio: {self.precio} - Cantidad: {self.cantidad}"
 
+def es_flotante_positivo(valor):
+    """Función que verifica si un valor puede ser un número flotante positivo."""
+    partes = valor.split('.')
+    if len(partes) == 1:  # No tiene parte decimal, puede ser entero
+        return partes[0].isdigit() and float(valor) > 0
+    elif len(partes) == 2:  # Tiene parte decimal
+        parte_entera, parte_decimal = partes
+        return (parte_entera.isdigit() or parte_entera == '') and parte_decimal.isdigit() and float(valor) > 0
+    return False
+
+def es_entero_positivo(valor):
+    """Función que verifica si un valor es un número entero positivo."""
+    return valor.isdigit() and int(valor) > 0
+
 def añadir_producto():
     nombre = input("Introduce el nombre del producto: ")
-    precio = float(input("Introduce el precio del producto: "))
-    cantidad = int(input("Introduce la cantidad del producto: "))
-    producto = Producto(nombre, precio, cantidad)
+    
+    precio = input("Introduce el precio del producto: ")
+    while not es_flotante_positivo(precio):
+        print("Error: El precio debe ser un número positivo válido.")
+        precio = input("Introduce el precio del producto: ")
+    
+    cantidad = input("Introduce la cantidad del producto: ")
+    while not es_entero_positivo(cantidad):
+        print("Error: La cantidad debe ser un número entero positivo.")
+        cantidad = input("Introduce la cantidad del producto: ")
+    
+    producto = Producto(nombre, float(precio), int(cantidad))
     productos.append(producto)
     print("Producto añadido con éxito.")
 
@@ -38,13 +61,19 @@ def actualizar_producto():
                 producto.nombre = nuevo_nombre
 
             nuevo_precio = input("Introduce el nuevo precio del producto (o presiona Enter para mantener el actual): ")
+            while nuevo_precio and not es_flotante_positivo(nuevo_precio):
+                print("Error: El precio debe ser un número positivo válido.")
+                nuevo_precio = input("Introduce el nuevo precio del producto (o presiona Enter para mantener el actual): ")
             if nuevo_precio:
                 producto.precio = float(nuevo_precio)
 
             nueva_cantidad = input("Introduce la nueva cantidad del producto (o presiona Enter para mantener la actual): ")
+            while nueva_cantidad and not es_entero_positivo(nueva_cantidad):
+                print("Error: La cantidad debe ser un número entero positivo.")
+                nueva_cantidad = input("Introduce la nueva cantidad del producto (o presiona Enter para mantener la actual): ")
             if nueva_cantidad:
                 producto.cantidad = int(nueva_cantidad)
-
+            
             print("Producto actualizado con éxito.")
             return
     print("Producto no encontrado.")
